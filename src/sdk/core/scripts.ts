@@ -2,10 +2,16 @@ import Editor from './main';
 
 declare var editor: any;
 
-export async function batchExecuteScripts(this: Editor, firstTime: boolean) {
+export async function batchExecuteScripts(this: Editor, firstTime: boolean, entities?: any) {
   if (!editor) return;
 
-  const scriptTypes = editor.call('assets:scripts:list');
+  let scriptTypes;
+
+  if (entities) {
+    scriptTypes = entities.flatMap((e: any) => Object.keys(e.get('components.script.scripts')));
+  } else {
+    scriptTypes = editor.call('assets:scripts:list');
+  }
 
   await this.loadEditorScriptAssets(scriptTypes);
 
@@ -14,7 +20,7 @@ export async function batchExecuteScripts(this: Editor, firstTime: boolean) {
   });
 
   // --- we loop through the entity hierarchy to execute the scripts in order
-  const entities = editor.call('entities:list');
+  entities = entities || editor.call('entities:list');
   const scriptInstances: any = {};
 
   this.interface.logMessage('Starting script execution');
@@ -50,6 +56,11 @@ export async function batchExecuteScripts(this: Editor, firstTime: boolean) {
       const instance = entity.script.create(scriptType, {
         enabled: false,
       });
+
+      if (!instance) {
+        console.warn(`[Uranus] ${ entity.name }: ${ scriptType } not loaded`, { legacy: entity.script.legacy });
+        continue;
+      }
 
       this.prepareEditorScriptAttributes(instance);
       instance.enabled = enableAll ? item.get(`components.script.scripts.${scriptType}.enabled`) : inEditor;

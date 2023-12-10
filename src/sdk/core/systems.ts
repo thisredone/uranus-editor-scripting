@@ -8,14 +8,14 @@ export function editorPickerState(this: Editor, state: boolean) {
   // @ts-ignore
   if (!this.pickerRef) {
     // @ts-ignore
-    this.pickerRef = editor._hooks["viewport:pick"];
+    this.pickerRef = editor.methods.get("viewport:pick");
   }
 
   if (state) {
     // @ts-ignore
-    editor._hooks["viewport:pick"] = this.pickerRef;
+    editor.methods.set("viewport:pick", this.pickerRef);
   } else {
-    editor._hooks["viewport:pick"] = function () {};
+    editor.methods.set("viewport:pick", function () {});
   }
 }
 

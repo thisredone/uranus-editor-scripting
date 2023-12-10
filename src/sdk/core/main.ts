@@ -39,7 +39,7 @@ export default class Editor {
   constructor() {
     this.app = editor ? editor.call('viewport:app') : undefined;
 
-    this.setupOutline(this.app);
+    // this.setupOutline(this.app);
 
     this.interface = new Interface();
 
@@ -52,6 +52,8 @@ export default class Editor {
     };
 
     this.interface.boot();
+
+    window.addEventListener('keyup', (e) => e.key === 'Alt' && e.preventDefault());
   }
 
   static inEditor() {

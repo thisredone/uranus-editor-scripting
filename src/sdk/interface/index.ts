@@ -19,7 +19,7 @@ export default class Interface {
     // --- clone an existing Playcanvas editor toolbar
     const toolbarBank = document
       .getElementById("layout-viewport")
-      .querySelector(".viewport-camera");
+      .querySelector(".widget-title");
 
     // Create a copy of it
     this.toolbar = toolbarBank.cloneNode(true) as HTMLElement;
@@ -29,6 +29,7 @@ export default class Interface {
     this.toolbar.classList.add("uranus-toolbar");
     this.toolbar.style.top = "40px";
     this.toolbar.style.left = "4px";
+    this.toolbar.style.position = 'absolute';
 
     // Remove all children
     this.toolbar.querySelectorAll("*").forEach((n) => n.remove());
